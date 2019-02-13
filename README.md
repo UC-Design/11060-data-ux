@@ -1,4 +1,5 @@
 # 11060-data-ux
+## Designing for Data Informed User Experience 
 
 Unit content for 11060, Designing for Data Informed User Experience.
 
@@ -11,3 +12,8 @@ There are 3 modules in this unit, each ending with an assessment item. Unit cont
 There will be no traditional lectures for the unit, instead, we will use on-campus and online workshops to work though the practical unit content. 
 
 Please make sure you refer to Canvas for further information.
+
+#### Modules
+- Module 1: Dynamic Data
+- Module 2: APIs in practice
+- Module 3: Interactive Project
