@@ -14,6 +14,6 @@ There will be no traditional lectures for the unit, instead, we will use on-camp
 Please make sure you refer to Canvas for further information.
 
 #### Modules
-- Module 1: Dynamic Data
-- Module 2: APIs in practice
-- Module 3: Interactive Project
+- Module 1: [Dynamic Data](/module-1)
+- Module 2: [APIs in practice](/module-2)
+- Module 3: [Interactive Project](/module-3)
