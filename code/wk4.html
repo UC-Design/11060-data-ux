@@ -1,0 +1,96 @@
+<html>
+
+    <head>
+        <title>Dark Sky Intro</title>
+    </head>
+    
+    <body>
+<!--    all content would go here -->
+        <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+        
+        <script type="text/javascript">
+        
+        $(document).ready(function(){
+            
+            // my API key
+            var key = '0a6009db83bbd52d398c4469e8b12292';
+            
+            // API call
+var url = 'https://api.darksky.net/forecast/' + key + '/-35.2809,149.1300?units=auto&callback=?';
+            
+            // make requst to server using api call
+            $.getJSON(url, function(data) {
+                //output request
+                console.log(data);
+                
+                
+                
+                //OLD - SLOW WAY
+//                var currently = $('<h2>').html('Current temp is: ' + data.currently.temperature + '&deg;C');
+                            
+                // append tag to body
+                //$('body').append(currently);
+                
+                
+                //TEMPERATURE
+                // get current temperature
+                console.log('current temp is: ' + data.currently.temperature);
+                
+                // NEW - EASY WAY 
+                // set the span in the h2 tag
+                $('.current span').html(data.currently.temperature)
+
+                // SUMMARY
+                // NEW - EASY WAY
+                // get summary and add to html tag
+                var summary = data.currently.summary;
+                
+                // add it to the html tag
+                $('.summary ').html(summary);
+                
+                // DATE
+                // get the date
+                console.log(data.currently.time);
+                
+                // create new JS Date object
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+                var now = new Date(data.currently.time *1000);
+                
+                //output new date to console
+                console.log(now);
+                
+                // add it to the html tag
+                $('.time').html(now.toDateString() + ', ' + now.toLocaleTimeString())
+                
+                //HUMIDITY
+                $('.humidity span').html(data.currently.humidity);
+            });
+            
+        });
+        
+        
+        </script>
+        
+        <div class="content">
+        
+<!-- set the content of these tags in the jquery -->
+
+            <h3>At: </h3>
+            <p class="time"></p>
+            
+            <h2 class="current">Current temp is: <span></span>&deg;C</h2>
+            
+            <h3>Humidity</h3>
+            <p class="humidity"><span></span>%</p>
+
+            <h3>Summary</h3>
+            <p class="summary"></p>
+            
+        </div>
+        
+    </body>
+
+</html>
