@@ -1,0 +1,194 @@
+<html>
+
+<head>
+    <title>Dark Sky Intro</title>
+</head>
+
+<body>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bellota+Text:wght@400;700&display=swap');
+
+        body {
+            font-family: 'Bellota Text', cursive;
+
+        }
+
+        #forecast {}
+
+        #forecast div {
+            width: 30%;
+            min-height: 180px;
+            float: left;
+            border: 1px solid #ccc;
+            margin: 5px;
+            padding: 5px;
+            background: #f4f4f4
+        }
+
+        h1,
+        h2,
+        h3,
+        h4,
+        h5,
+        h6 {
+            font-weight: 600;
+        }
+
+        p.temp {
+            float: left;
+            margin-right: 10px;
+        }
+    </style>
+    <!--    all content would go here -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+
+
+            //create variable for new location information
+            var newLocation = '';
+
+            //create a backup location in case the geolocation fails
+            var backupLocation = '-35.2809,149.1300';
+
+            //now get browser geo location
+            if (navigator.geolocation) {
+
+                //log the data returned through the browser geolocation api
+                console.log(navigator.geolocation)
+
+                //if able to retrive current location
+                function success(pos) {
+                    var crd = pos.coords;
+
+                    console.log('Your current position is:');
+                    console.log('Latitude : ' + crd.latitude);
+                    console.log('Longitude: ' + crd.longitude);
+                    console.log('More or less ' + crd.accuracy + ' meters.');
+
+                    //set the newLocation variable to be in the correct format for the darksky api
+                    newLocation = crd.latitude + ',' + crd.longitude;
+
+                    //call function to get darksky api data with newLocation variable
+                    getWeatherData(newLocation);
+
+                };
+
+                //if there is an error returning the geolocation then you should identify it and resolve it
+                function error(err) {
+                    console.warn('ERROR(' + err.code + '): ' + err.message);
+                    getWeatherData(backupLocation);
+
+                };
+
+                //this is the line that actually prompts the user for their location
+                navigator.geolocation.getCurrentPosition(success, error);
+
+            } else {
+                //if the browser doesn't support gelocation then you need to do some testing
+                ShowError();
+            }
+
+        });
+
+        //function that retrieves data from api
+        function getWeatherData(currentLocation) {
+
+            //my secret key - update to yours
+            var key = '0a6009db83bbd52d398c4469e8b12292';
+
+            //set default location - canberra
+            var defaultLocation = '-35.28346,149.12807';
+
+            //api call
+            var url = 'https://api.darksky.net/forecast/' + key + '/' + currentLocation + '?units=auto&callback=?';
+
+            // make requst to server using api call
+            $.getJSON(url, function(data) {
+                //output request
+                console.log(data);
+
+                //TEMPERATURE
+                // get current temperature
+                console.log('current temp is: ' + data.currently.temperature);
+
+                // NEW - EASY WAY 
+                // set the span in the h2 tag
+                $('.current span').html(data.currently.temperature)
+
+                // SUMMARY
+                // NEW - EASY WAY
+                // get summary and add to html tag
+                var summary = data.currently.summary;
+
+                // add it to the html tag
+                $('.summary ').html(summary);
+
+                // DATE
+                // get the date
+                console.log(data.currently.time);
+
+                // create new JS Date object
+                // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date
+                var now = new Date(data.currently.time * 1000);
+
+                //output new date to console
+                console.log(now);
+
+                // add it to the html tag
+                $('.time').html(now.toDateString() + ', ' + now.toLocaleTimeString())
+
+                //HUMIDITY
+                $('.humidity span').html(data.currently.humidity);
+
+
+                ////loop through the data and add it the table
+                //new row for each new item
+                for (var i = 0; i < data.daily.data.length; i++) {
+                    var f = data.daily.data[i]; // the data for one day in the forecast
+
+                    console.log(f);
+
+                    var listItem = $("<div>");
+                    var date = new Date(f.time * 1000);
+
+                    listItem.append("<p>" + date.toDateString() + "</p>");
+                    listItem.append("<p>" + f.summary + "</p>");
+                    listItem.append("<p class='temp low'>" + Math.round(f.temperatureMin) + "&deg;C</p>");
+                    listItem.append("<p class='temp high'>" + Math.round(f.temperatureMax) + "&deg;C</p>");
+
+                    //append the tr info to the table
+                    $("#forecast").append(listItem);
+
+                }
+
+
+            });
+        };
+    </script>
+
+    <div class="content">
+
+        <!-- set the content of these tags in the jquery -->
+
+        <h3>At: </h3>
+        <p class="time"></p>
+
+        <h2 class="current">Current temp is: <span></span>&deg;C</h2>
+
+        <h3>Humidity</h3>
+        <p class="humidity"><span></span>%</p>
+
+        <h3>Summary</h3>
+        <p class="summary"></p>
+
+
+        <div id="forecast">
+
+        </div>
+
+    </div>
+
+</body></html>
